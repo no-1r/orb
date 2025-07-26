@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the orb</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Pirata+One&family=Caesar+Dressing&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #8a8a8a;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 60px;
+            letter-spacing: 4px;
+            color: #666;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #555;
+            text-transform: lowercase;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            background: transparent;
+            border: 1px solid #333;
+            color: #999;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 18px;
+            padding: 20px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #444;
+            color: #bbb;
+        }
+        
+        textarea::placeholder {
+            color: #444;
+            font-style: italic;
+        }
+        
+        .canvas-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        #drawingCanvas {
+            border: 1px solid #333;
+            background: #111;
+            cursor: crosshair;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control {
+            display: inline-block;
+            margin: 0 15px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        input[type="color"] {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        input[type="range"] {
+            width: 80px;
+            margin: 0 5px;
+        }
+        
+        .btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        
+        .btn:hover {
+            border-color: #444;
+            color: #888;
+        }
+        
+        .upload {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px dashed #333;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        input[type="file"] {
+            color: #666;
+            background: transparent;
+            border: none;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+        }
+        
+        .submit {
+            display: block;
+            margin: 60px auto 0;
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #777;
+            font-family: 'EB Garamond', serif;
+            font-size: 16px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+        
+        .submit:hover {
+            border-color: #555;
+            color: #999;
+        }
+        
+        .submit:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #333;
+            padding: 8px 16px;
+        }
+        
+        .nav:hover {
+            color: #777;
+            border-color: #444;
+        }
+        
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            border: 1px solid #333;
+            display: none;
+        }
+        
+        .message.success {
+            color: #6a6;
+            border-color: #464;
+        }
+        
+        .message.error {
+            color: #a66;
+            border-color: #644;
+        }
+    </style>
+</head>
+<body>
+    <a href="/orb" class="nav">scry</a>
+    
+    <div class="container">
+        <h1>the orb</h1>
+        
+        <form id="submissionForm">
+            <div class="section">
+                <label class="label">words</label>
+                <textarea name="text_content" placeholder="speak into the void..."></textarea>
+            </div>
+            
+            <div class="section">
+                <label class="label">marks</label>
+                <div class="canvas-area">
+                    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+                    <div class="controls">
+                        <span class="control">
+                            <input type="color" id="colorPicker" value="#888888">
+                        </span>
+                        <span class="control">
+                            size <input type="range" id="brushSize" min="1" max="12" value="2">
+                        </span>
+                        <button type="button" id="clearCanvas" class="btn">clear</button>
+                    </div>
+                </div>
+                
+                <div class="upload">
+                    or select image
+                    <br><br>
+                    <input type="file" name="doodle_file" accept="image/*">
+                </div>
+            </div>
+            
+            <button type="submit" class="submit" id="submitBtn">
+                submit
+            </button>
+        </form>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSize = document.getElementById('brushSize');
+        const clearButton = document.getElementById('clearCanvas');
+        
+        let isDrawing = false;
+        let hasDrawn = false;
+        
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('touchend', stopDrawing);
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.strokeStyle = colorPicker.value;
+            ctx.lineWidth = brushSize.value;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            
+            hasDrawn = true;
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type.replace('touch', 'mouse'), {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        
+        clearButton.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasDrawn = false;
+        });
+        
+        document.getElementById('submissionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+            const formData = new FormData();
+            
+            const textContent = document.querySelector('textarea[name="text_content"]').value.trim();
+            if (textContent) {
+                formData.append('text_content', textContent);
+            }
+            
+            if (hasDrawn) {
+                const canvasData = canvas.toDataURL('image/png');
+                formData.append('canvas_data', canvasData);
+            }
+            
+            const fileInput = document.querySelector('input[name="doodle_file"]');
+            if (fileInput.files.length > 0) {
+                formData.append('doodle_file', fileInput.files[0]);
+            }
+            
+            if (!textContent && !hasDrawn && fileInput.files.length === 0) {
+                showMessage('something must be given', 'error');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'sending...';
+            
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('received', 'success');
+                    document.querySelector('textarea').value = '';
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    hasDrawn = false;
+                    fileInput.value = '';
+                } else {
+                    showMessage(result.error || 'rejected', 'error');
+                }
+            } catch (error) {
+                showMessage('connection failed', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'submit';
+            }
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

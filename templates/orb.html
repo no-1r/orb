@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scrying</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Pirata+One&family=Caesar+Dressing&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #050505;
+            color: #666;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 60px;
+            letter-spacing: 6px;
+            color: #444;
+        }
+        
+        .orb-container {
+            margin: 60px 0;
+            position: relative;
+        }
+        
+        .orb {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #222, #000);
+            border: 1px solid #333;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.8s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .orb:hover {
+            border-color: #444;
+            background: radial-gradient(circle at 40% 40%, #333, #111);
+        }
+        
+        .orb.scrying {
+            animation: scry 2s ease-in-out;
+        }
+        
+        @keyframes scry {
+            0%, 100% { 
+                background: radial-gradient(circle at 40% 40%, #222, #000);
+            }
+            50% { 
+                background: radial-gradient(circle at 40% 40%, #444, #222);
+            }
+        }
+        
+        .orb-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+            border-radius: 50%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .orb-content.visible {
+            opacity: 1;
+        }
+        
+        .orb-text {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+            hyphens: auto;
+            margin-bottom: 10px;
+        }
+        
+        .orb-image {
+            max-width: 80%;
+            max-height: 60%;
+            object-fit: contain;
+            border-radius: 10px;
+            opacity: 0.9;
+        }
+        
+        .instruction {
+            color: #444;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .empty {
+            color: #333;
+            font-style: italic;
+            margin: 40px 0;
+        }
+        
+        .nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #222;
+            padding: 8px 16px;
+        }
+        
+        .nav:hover {
+            color: #666;
+            border-color: #333;
+        }
+        
+        .stats {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #333;
+            font-size: 12px;
+        }
+        
+        .loading {
+            color: #555;
+            font-style: italic;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .error {
+            color: #644;
+            margin: 20px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="/input" class="nav">contribute</a>
+    
+    <div class="container">
+        <h1>scrying</h1>
+        
+        <div class="instruction">touch the orb to see</div>
+        
+        <div class="orb-container">
+            <div class="orb" id="orb">
+                <div class="orb-content" id="orbContent">
+                    <div class="orb-text" id="orbText"></div>
+                    <img class="orb-image" id="orbImage" style="display: none;">
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">reaching into the void...</div>
+        <div class="error" id="error">the orb is silent</div>
+        <div class="empty" id="empty">nothing stirs within</div>
+    </div>
+    
+    <div class="stats" id="stats">{{ total_submissions }} whispers captured</div>
+
+    <script>
+        const orb = document.getElementById('orb');
+        const orbContent = document.getElementById('orbContent');
+        const orbText = document.getElementById('orbText');
+        const orbImage = document.getElementById('orbImage');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const empty = document.getElementById('empty');
+        const stats = document.getElementById('stats');
+        
+        orb.addEventListener('click', scryOrb);
+        
+        async function scryOrb() {
+            // Hide previous content
+            orbContent.classList.remove('visible');
+            error.style.display = 'none';
+            empty.style.display = 'none';
+            
+            // Show loading and animate orb
+            loading.style.display = 'block';
+            orb.classList.add('scrying');
+            
+            try {
+                const response = await fetch('/api/scry');
+                const result = await response.json();
+                
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    orb.classList.remove('scrying');
+                    
+                    if (result.success && result.submission) {
+                        showVision(result.submission);
+                        updateStats();
+                    } else {
+                        empty.style.display = 'block';
+                    }
+                }, 1500);
+                
+            } catch (err) {
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    orb.classList.remove('scrying');
+                    error.style.display = 'block';
+                }, 1500);
+            }
+        }
+        
+        function showVision(submission) {
+            orbText.textContent = '';
+            orbImage.style.display = 'none';
+            
+            if (submission.text_content) {
+                orbText.textContent = submission.text_content;
+            }
+            
+            if (submission.doodle_filename) {
+                orbImage.src = '/uploads/' + submission.doodle_filename;
+                orbImage.style.display = 'block';
+            }
+            
+            orbContent.classList.add('visible');
+        }
+        
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const result = await response.json();
+                stats.textContent = result.total_submissions + ' whispers captured';
+            } catch (err) {
+                // Silently fail
+            }
+        }
+        
+        // Initial stats load
+        updateStats();
+    </script>
+</body>
+</html>
