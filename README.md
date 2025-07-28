@@ -5,7 +5,7 @@
 
 A mystical web app where users anonymously share thoughts and drawings. Touch the orb to glimpse random submissions from others, or contribute your own prophecies to the eternal collection.
 
-**[Live Demo](https://your-railway-url.up.railway.app)** | **[Run Locally](#local-setup)**
+**[Live Demo]([https://your-railway-url.up.railway.app)](https://orb.up.railway.app/)** | **[Run Locally](#local-setup)**
 
 ## Features
 
