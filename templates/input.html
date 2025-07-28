@@ -482,7 +482,7 @@
         function draw(e) {
             if (!isDrawing) return;
             
-            const rect = canvas.getBoundingClientRange();
+            const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
