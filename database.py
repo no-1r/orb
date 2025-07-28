@@ -2,13 +2,15 @@ import sqlite3
 import os
 from datetime import datetime
 
-# Database file location
-DATABASE = 'instance/orb.db'
+# Use absolute path for Railway deployment
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
+DATABASE = os.path.join(INSTANCE_DIR, 'orb.db')
 
 def init_database():
     """Initialize the database and create tables if they don't exist"""
     # Create instance directory if it doesn't exist
-    os.makedirs('instance', exist_ok=True)
+    os.makedirs(INSTANCE_DIR, exist_ok=True)
     
     # Connect to database (creates file if doesn't exist)
     conn = sqlite3.connect(DATABASE)
@@ -27,13 +29,13 @@ def init_database():
     
     conn.commit()
     conn.close()
+    print(f"Database initialized at: {DATABASE}")
 
 def add_submission(text_content=None, doodle_filename=None):
     """Add a new submission to the database"""
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     
-
     if text_content and doodle_filename:
         submission_type = 'both'
     elif text_content:
@@ -52,6 +54,7 @@ def add_submission(text_content=None, doodle_filename=None):
     conn.commit()
     conn.close()
     
+    print(f"Added submission {submission_id} of type {submission_type}")
     return submission_id
 
 def get_random_submission():
@@ -90,6 +93,18 @@ def get_submission_count():
     conn.close()
     return count
 
+def check_database_status():
+    """Debug function to check database status"""
+    print(f"Database path: {DATABASE}")
+    print(f"Database exists: {os.path.exists(DATABASE)}")
+    if os.path.exists(DATABASE):
+        print(f"Database size: {os.path.getsize(DATABASE)} bytes")
+        count = get_submission_count()
+        print(f"Total submissions: {count}")
+    else:
+        print("Database file not found!")
+
 if __name__ == '__main__':
     init_database()
+    check_database_status()
     print("Database initialized successfully!")

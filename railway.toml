@@ -1,0 +1,17 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "always"
+
+
+[[deploy.volumes]]
+mountPath = "/app/instance"
+name = "orb-database"
+
+
+[[deploy.volumes]]
+mountPath = "/app/static/uploads"
+name = "orb-uploads"
