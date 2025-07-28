@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>the orb</title>
+    <title>contribute</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Pirata+One&family=Caesar+Dressing&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jacquarda+Bastarda+9&display=swap');
         
         * {
             margin: 0;
@@ -14,9 +14,9 @@
         }
         
         body {
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #0f0f23, #1e1e3f, #2d1b4f);
             color: #8a8a8a;
-            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-family: 'Jacquarda Bastarda 9', serif;
             font-size: 18px;
             line-height: 1.6;
             padding: 40px 20px;
@@ -24,17 +24,117 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
+            position: relative;
         }
         
         h1 {
             text-align: center;
-            font-size: 24px;
+            font-family: 'Jacquard 12', cursive;
+            font-size: 36px;
             font-weight: 400;
             margin-bottom: 60px;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
+            color: #b8860b;
+            text-shadow: 0 0 20px rgba(184, 134, 11, 0.5);
+        }
+        
+        .wizard-icon {
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 20;
+            cursor: pointer;
+            animation: wizardFloat 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes wizardFloat {
+            0%, 100% { 
+                transform: translateY(-50%) translateX(0px) rotate(0deg);
+            }
+            25% { 
+                transform: translateY(-55%) translateX(3px) rotate(2deg);
+            }
+            50% { 
+                transform: translateY(-45%) translateX(6px) rotate(-1deg);
+            }
+            75% { 
+                transform: translateY(-50%) translateX(2px) rotate(1deg);
+            }
+        }
+
+        .wizard-icon:hover {
+            animation-duration: 2s;
+            filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.6));
+        }
+        
+        .tutorial-dialogue {
+            position: fixed;
+            top: 50%;
+            left: 140px;
+            transform: translateY(-50%);
+            background: rgba(15, 15, 35, 0.95);
+            border: 2px solid #b8860b;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 300px;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            font-family: 'Jacquarda Bastarda 9', serif;
+            color: #e8e8e8;
+            font-size: 14px;
+            line-height: 1.6;
+            cursor: pointer;
+            animation: dialogueAppear 0.5s ease-out;
+        }
+        
+        .tutorial-dialogue::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-right: 10px solid #b8860b;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        
+        .tutorial-dialogue h3 {
+            color: #b8860b;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .tutorial-dialogue .close-hint {
+            font-size: 11px;
             color: #666;
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        @keyframes dialogueAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(-50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+        }
+        
+        .tutorial-dialogue.hidden {
+            display: none;
         }
         
         .section {
@@ -44,32 +144,37 @@
         .label {
             display: block;
             margin-bottom: 15px;
-            font-size: 16px;
-            color: #555;
+            font-size: 18px;
+            color: #888;
             text-transform: lowercase;
+            font-family: 'Jacquarda Bastarda 9', serif;
+            letter-spacing: 1px;
         }
         
         textarea {
             width: 100%;
             min-height: 150px;
-            background: transparent;
-            border: 1px solid #333;
-            color: #999;
-            font-family: 'Cinzel', 'Times New Roman', serif;
+            background: rgba(30, 30, 63, 0.7);
+            border: 1px solid #444;
+            color: #bbb;
+            font-family: 'Jacquarda Bastarda 9', serif;
             font-size: 18px;
             padding: 20px;
             resize: vertical;
             line-height: 1.8;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
         
         textarea:focus {
             outline: none;
-            border-color: #444;
-            color: #bbb;
+            border-color: #b8860b;
+            color: #ddd;
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
         }
         
         textarea::placeholder {
-            color: #444;
+            color: #555;
             font-style: italic;
         }
         
@@ -78,32 +183,49 @@
             margin: 30px 0;
         }
         
-        #drawingCanvas {
-            border: 1px solid #333;
+        .canvas-container {
+            display: inline-block;
+            margin: 20px 0;
+            border: 1px solid #444;
+            border-radius: 4px;
             background: #111;
+            padding: 4px;
+        }
+        
+        #drawingCanvas {
+            border: none;
+            background: #fff;
             cursor: crosshair;
             display: block;
-            margin: 20px auto;
+            border-radius: 2px;
         }
         
         .controls {
             margin: 20px 0;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         
         .control {
-            display: inline-block;
-            margin: 0 15px;
-            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #777;
             font-size: 14px;
+            font-family: 'Jacquarda Bastarda 9', serif;
         }
         
         input[type="color"] {
-            width: 30px;
-            height: 30px;
-            border: none;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #444;
             background: transparent;
             cursor: pointer;
+            border-radius: 2px;
         }
         
         input[type="range"] {
@@ -113,74 +235,107 @@
         
         .btn {
             background: transparent;
-            border: 1px solid #333;
-            color: #666;
+            border: 1px solid #444;
+            color: #777;
             padding: 8px 16px;
             cursor: pointer;
-            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-family: 'Jacquarda Bastarda 9', serif;
             font-size: 14px;
             margin: 0 5px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
         }
         
         .btn:hover {
-            border-color: #444;
-            color: #888;
+            border-color: #b8860b;
+            color: #b8860b;
         }
         
         .upload {
             margin: 30px 0;
-            padding: 20px;
-            border: 1px dashed #333;
+            padding: 25px;
+            border: 1px dashed #444;
             text-align: center;
-            color: #555;
+            color: #666;
             font-size: 14px;
+            border-radius: 4px;
+            background: rgba(30, 30, 63, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .upload:hover {
+            border-color: #777;
+        }
+        
+        .upload-text {
+            font-family: 'Jacquarda Bastarda 9', serif;
+            margin-bottom: 15px;
+            font-size: 16px;
         }
         
         input[type="file"] {
-            color: #666;
+            color: #777;
             background: transparent;
-            border: none;
-            font-family: 'Cinzel', 'Times New Roman', serif;
+            border: 1px solid #444;
+            border-radius: 2px;
+            padding: 6px 10px;
+            font-family: 'Jacquarda Bastarda 9', serif;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .file-info {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+            font-style: italic;
         }
         
         .submit {
             display: block;
             margin: 60px auto 0;
             padding: 15px 40px;
-            background: transparent;
-            border: 1px solid #444;
-            color: #777;
-            font-family: 'EB Garamond', serif;
-            font-size: 16px;
+            background: rgba(184, 134, 11, 0.8);
+            border: 1px solid #b8860b;
+            color: #fff;
+            font-family: 'Jacquard 12', cursive;
+            font-size: 18px;
             cursor: pointer;
             letter-spacing: 2px;
             text-transform: lowercase;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
         
         .submit:hover {
-            border-color: #555;
-            color: #999;
+            background: #b8860b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
         }
         
         .submit:disabled {
-            opacity: 0.3;
+            opacity: 0.4;
             cursor: not-allowed;
+            transform: none;
         }
         
         .nav {
             position: fixed;
             top: 20px;
             right: 20px;
-            color: #555;
+            color: #666;
             text-decoration: none;
             font-size: 14px;
-            border: 1px solid #333;
+            border: 1px solid #444;
             padding: 8px 16px;
+            border-radius: 2px;
+            font-family: 'Jacquarda Bastarda 9', serif;
+            transition: all 0.3s ease;
         }
         
         .nav:hover {
-            color: #777;
-            border-color: #444;
+            color: #b8860b;
+            border-color: #b8860b;
         }
         
         .message {
@@ -188,26 +343,40 @@
             padding: 15px;
             text-align: center;
             font-size: 14px;
-            border: 1px solid #333;
+            border: 1px solid #444;
+            border-radius: 2px;
             display: none;
+            font-family: 'Jacquarda Bastarda 9', serif;
         }
         
         .message.success {
-            color: #6a6;
-            border-color: #464;
+            color: #7a9c4a;
+            border-color: #7a9c4a;
+            background: rgba(122, 156, 74, 0.1);
         }
         
         .message.error {
-            color: #a66;
-            border-color: #644;
+            color: #b8604a;
+            border-color: #b8604a;
+            background: rgba(184, 96, 74, 0.1);
         }
     </style>
 </head>
 <body>
-    <a href="/orb" class="nav">scry</a>
+    <img src="/static/images/wizerd.png" alt="" class="wizard-icon" id="wizard">
+    
+    <div class="tutorial-dialogue" id="tutorialDialogue">
+        <h3>Share Your Prophecy</h3>
+        <p>Here you may inscribe your revelations into the void, or mark your visions upon the canvas.</p>
+        <br>
+        <p>Your contributions become part of the orb's eternal collection, to be discovered by future ponderers.</p>
+        <div class="close-hint">Click anywhere to dismiss</div>
+    </div>
+    
+    <a href="/orb" class="nav">ponder</a>
     
     <div class="container">
-        <h1>the orb</h1>
+        <h1>create prophecy</h1>
         
         <form id="submissionForm">
             <div class="section">
@@ -218,10 +387,12 @@
             <div class="section">
                 <label class="label">marks</label>
                 <div class="canvas-area">
-                    <canvas id="drawingCanvas" width="400" height="300"></canvas>
+                    <div class="canvas-container">
+                        <canvas id="drawingCanvas" width="400" height="300"></canvas>
+                    </div>
                     <div class="controls">
                         <span class="control">
-                            <input type="color" id="colorPicker" value="#888888">
+                            <input type="color" id="colorPicker" value="#333333">
                         </span>
                         <span class="control">
                             size <input type="range" id="brushSize" min="1" max="12" value="2">
@@ -231,9 +402,9 @@
                 </div>
                 
                 <div class="upload">
-                    or select image
-                    <br><br>
-                    <input type="file" name="doodle_file" accept="image/*">
+                    <div class="upload-text">or select image</div>
+                    <input type="file" id="fileInput" name="doodle_file" accept="image/*">
+                    <div class="file-info">PNG, JPG, GIF only - Max 5MB</div>
                 </div>
             </div>
             
@@ -251,6 +422,9 @@
         const colorPicker = document.getElementById('colorPicker');
         const brushSize = document.getElementById('brushSize');
         const clearButton = document.getElementById('clearCanvas');
+        const fileInput = document.getElementById('fileInput');
+        const wizard = document.getElementById('wizard');
+        const tutorialDialogue = document.getElementById('tutorialDialogue');
         
         let isDrawing = false;
         let hasDrawn = false;
@@ -258,16 +432,44 @@
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
+        // Close tutorial when clicked
+        tutorialDialogue.addEventListener('click', () => {
+            tutorialDialogue.classList.add('hidden');
+        });
         
-        canvas.addEventListener('touchstart', handleTouch);
-        canvas.addEventListener('touchmove', handleTouch);
-        canvas.addEventListener('touchend', stopDrawing);
+        // Magical wizard teleportation
+        wizard.addEventListener('click', () => {
+            tutorialDialogue.classList.add('hidden');
+            
+            const randomX = Math.random() * (window.innerWidth - 100);
+            const randomY = Math.random() * (window.innerHeight - 100) + 50;
+            
+            wizard.style.left = randomX + 'px';
+            wizard.style.top = randomY + 'px';
+            wizard.style.transform = 'scale(1.3) rotate(360deg)';
+            
+            setTimeout(() => {
+                wizard.style.transform = 'scale(1)';
+            }, 300);
+        });
+        
+        function clearFileUpload() {
+            fileInput.value = '';
+        }
+        
+        function clearDrawing() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasDrawn = false;
+        }
         
         function startDrawing(e) {
+            if (fileInput.value) {
+                if (!confirm('This will clear your uploaded file. Continue drawing?')) {
+                    return;
+                }
+                clearFileUpload();
+            }
+            
             isDrawing = true;
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -280,7 +482,7 @@
         function draw(e) {
             if (!isDrawing) return;
             
-            const rect = canvas.getBoundingClientRect();
+            const rect = canvas.getBoundingClientRange();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
@@ -306,9 +508,27 @@
             canvas.dispatchEvent(mouseEvent);
         }
         
+        fileInput.addEventListener('change', () => {
+            if (hasDrawn && fileInput.value) {
+                if (confirm('This will clear your drawing. Continue with file upload?')) {
+                    clearDrawing();
+                } else {
+                    fileInput.value = '';
+                }
+            }
+        });
+        
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('touchend', stopDrawing);
+        
         clearButton.addEventListener('click', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            hasDrawn = false;
+            clearDrawing();
         });
         
         document.getElementById('submissionForm').addEventListener('submit', async (e) => {
@@ -350,11 +570,10 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    showMessage('received', 'success');
+                    showMessage(result.message, 'success');
                     document.querySelector('textarea').value = '';
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    hasDrawn = false;
-                    fileInput.value = '';
+                    clearDrawing();
+                    clearFileUpload();
                 } else {
                     showMessage(result.error || 'rejected', 'error');
                 }

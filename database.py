@@ -33,7 +33,7 @@ def add_submission(text_content=None, doodle_filename=None):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     
-    # Determine submission type
+
     if text_content and doodle_filename:
         submission_type = 'both'
     elif text_content:
@@ -41,7 +41,7 @@ def add_submission(text_content=None, doodle_filename=None):
     elif doodle_filename:
         submission_type = 'doodle'
     else:
-        return None  # Invalid submission
+        return None  
     
     cursor.execute('''
         INSERT INTO submissions (text_content, doodle_filename, submission_type)
@@ -90,7 +90,6 @@ def get_submission_count():
     conn.close()
     return count
 
-# Initialize database when this file is imported
 if __name__ == '__main__':
     init_database()
     print("Database initialized successfully!")
