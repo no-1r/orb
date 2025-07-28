@@ -153,11 +153,6 @@ def process_uploaded_file(file):
 
 
 
-@app.route('/')
-def home():
-    """Homepage - redirect to input interface"""
-    return render_template('input.html')
-
 @app.route('/input')
 def input_page():
     """Input interface where users submit content"""
@@ -275,7 +270,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/')
-def home():
+def index():
     """Homepage - redirect to orb interface"""
     return render_template('orb.html', total_submissions=get_submission_count())
 
